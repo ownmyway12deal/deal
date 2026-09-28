@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1f2126">
+<title>루틴 24주</title>
+<style>
+:root{--bg:#1f2126;--card:#272a30;--chip:#30343b;--in:#1b1d22;--line:#353940;--tx:#d9dbe0;--mut:#8f949d;--on:#1f2126;
+--acc:#8e97d6;--ok:#8fc1a9;--warn:#e0a870;--inj:#b8a6db;--beige:#d3c4a2;--chili:#d68c7c;--chiliBg:#3a2c2a;--warnBg:#3a3128;--injBg:#342f3d;--chk:#5a5f68}
+:root[data-theme="light"]{--bg:#f7f4ee;--card:#fffdf8;--chip:#efebe3;--in:#faf8f3;--line:#e4dfd5;--tx:#3d3f45;--mut:#83868d;--on:#fffdf8;
+--acc:#6570b8;--ok:#5f9c80;--warn:#c47f3d;--inj:#8a73b8;--beige:#a8905f;--chili:#b8604f;--chiliBg:#f6e4df;--warnBg:#f6ebdd;--injBg:#eee8f6;--chk:#b9b4aa}
+@media (prefers-color-scheme: light){:root[data-theme="auto"]{--bg:#f7f4ee;--card:#fffdf8;--chip:#efebe3;--in:#faf8f3;--line:#e4dfd5;--tx:#3d3f45;--mut:#83868d;--on:#fffdf8;
+--acc:#6570b8;--ok:#5f9c80;--warn:#c47f3d;--inj:#8a73b8;--beige:#a8905f;--chili:#b8604f;--chiliBg:#f6e4df;--warnBg:#f6ebdd;--injBg:#eee8f6;--chk:#b9b4aa}}
+.blk{border-left:3px solid transparent;padding-left:10px!important}
+.blk.t-study{border-left-color:var(--acc)}.blk.t-ex{border-left-color:var(--ok)}.blk.t-meal{border-left-color:var(--beige)}.blk.t-inj{border-left-color:var(--inj)}.blk.t-etc{border-left-color:var(--line)}.blk.mk{border-left-color:var(--chili)}.blk.mk .bn{color:var(--chili)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 -apple-system,"Noto Sans KR","Apple SD Gothic Neo",sans-serif;padding-bottom:80px}
+header{padding:18px 16px 6px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+h1{font-size:19px;margin:0}
+h2{font-size:15px;margin:0 0 8px}
+.sub{color:var(--mut);font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:10px 16px;padding:14px}
+.tags span{display:inline-block;font-size:12px;padding:3px 9px;border-radius:999px;background:var(--chip);margin:3px 4px 0 0}
+.tags .inj{background:var(--injBg);color:var(--inj)}
+.bar{height:8px;background:var(--chip);border-radius:9px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--ok);border-radius:9px}
+.stat{display:flex;gap:10px}
+.stat>div{flex:1}
+.big{font-size:22px;font-weight:700}
+.blk{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--line)}
+.blk:first-child{border-top:0}
+.blk.now{background:linear-gradient(90deg,color-mix(in srgb,var(--acc) 16%,transparent),transparent);margin:0 -14px;padding:11px 14px;border-radius:10px}
+.blk.done .bn{color:var(--mut);text-decoration:line-through}
+.blk.done{opacity:.7}
+.chk{width:30px;height:30px;border-radius:9px;border:2px solid var(--chk);background:none;color:var(--on);font-weight:900;font-size:16px;flex:none}
+.chk.on{background:var(--ok);border-color:var(--ok)}
+.bi{flex:1;min-width:0}
+.bt{font-size:12px;color:var(--mut)}
+.bn{font-weight:600}
+.bx{font-size:12px;color:var(--warn)}
+.sm{font-size:12px;color:var(--acc);font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit}
+.tb{background:var(--chip);border:1px solid var(--line);border-radius:9px;padding:7px 12px;flex:none}
+.tb.run{background:var(--acc);color:var(--on);border-color:var(--acc);font-weight:700}
+.btn{background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%;margin-top:8px;text-align:center}
+.btn.p{background:var(--acc);color:var(--on);font-weight:700;border-color:var(--acc)}
+.pill{background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:6px 11px;font-size:12px;white-space:nowrap}
+.pill.on{background:var(--ok);color:var(--on);border-color:var(--ok);font-weight:700}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--in);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;background:none;border:0;padding:12px 0;color:var(--mut);font-size:13px}
+nav button.on{color:var(--acc);font-weight:700}
+.wk{padding:9px 0;border-top:1px solid var(--line);font-size:13px}
+.wk:first-of-type{border-top:0}
+.wk.cur{color:var(--acc)}
+.wk b{display:inline-block;min-width:46px}
+.row{display:grid;grid-template-columns:78px 78px 1fr;gap:6px;margin-bottom:6px}
+.row2{display:grid;grid-template-columns:1fr 40px;gap:6px;margin-bottom:12px}
+input,select{background:var(--in);border:1px solid var(--line);color:var(--tx);border-radius:8px;padding:8px;font:inherit;font-size:14px;width:100%;min-width:0}
+.del{background:var(--chiliBg);border:1px solid var(--chili);border-radius:8px;color:var(--chili)}
+.hd{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:13px}
+.hd:first-of-type{border-top:0}
+.hd .d{width:74px;flex:none}
+.hd .b{flex:1}
+.hd .v{width:92px;text-align:right;flex:none;color:var(--mut)}
+#alarm{position:fixed;inset:0;background:color-mix(in srgb,var(--bg) 94%,transparent);display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px;z-index:9;text-align:center}
+#alarm.on{display:flex}
+#amsg{font-size:24px;font-weight:800;margin:14px 0 26px}
+#alarm .btn{max-width:280px;font-size:17px;padding:14px}
+.stamp{display:inline-block;border:2.5px solid currentColor;border-radius:8px;padding:3px 9px;font-weight:900;font-size:12px;letter-spacing:.5px;text-transform:uppercase;transform:rotate(-6deg);white-space:nowrap}
+.wkr{display:flex;align-items:center;gap:10px;padding:12px 0;border-top:1px solid var(--line)}
+.wkr:first-of-type{border-top:0}
+.wkr .t{flex:1;min-width:0;font-size:14px}
+.note{font-size:12px;color:var(--mut);margin-top:6px}
+</style>
+</head>
+<body>
+<main id="main"></main>
+<nav>
+  <button data-t="today">오늘</button>
+  <button data-t="plan">24주 계획</button>
+  <button data-t="hist">기록</button>
+  <button data-t="set">설정</button>
+</nav>
+<div id="alarm"><div style="font-size:44px">⏰</div><div id="amsg"></div><button class="btn p" id="aok">확인</button></div>
+
+<script>
+const START=new Date(2026,8,29); // 24주 계획 1주차 시작 9/29(화) ~ 3/16(화)
+const APP_START=new Date(2026,8,29); // 앱 루틴 시작일 9/29(화)
+const W=[
+['1단계 적응기','RPE 4~5','','루틴 시작 주간'],
+['1단계 적응기','RPE 5~6','',''],
+['1단계 적응기','RPE 5','',''],
+['1단계 적응기','RPE 5','',''],
+['2단계 발전기','RPE 5~6','',''],
+['2단계 발전기','RPE 6~7','',''],
+['2단계 발전기','RPE 6','',''],
+['2단계 발전기','RPE 6','',''],
+['3단계 극대화','RPE 7~8','','🏊 수영 부스터 시작'],
+['3단계 극대화','RPE 8','',''],
+['3단계 극대화','RPE 7','',''],
+['3단계 극대화','RPE 7','','정체기 가능 · 누적 피로 최고 · 수영 쉬기'],
+['1단계 디로딩','RPE 3~4','','위고비 시작 주간 · 연말 야식 주의'],
+['1단계 디로딩','RPE 4~5','','관절·체력 회복'],
+['1단계 디로딩','RPE 4~5','',''],
+['1단계 디로딩','RPE 4~5','',''],
+['2단계 재발전','RPE 5~6','',''],
+['2단계 재발전','RPE 6~7','',''],
+['2단계 재발전','RPE 6','','수분 섭취 챙기기'],
+['2단계 재발전','RPE 6','',''],
+['3단계 최종돌파','RPE 7~8','','🏊 수영 재개'],
+['3단계 최종돌파','RPE 8','',''],
+['3단계 최종돌파','RPE 7','',''],
+['3단계 최종돌파','RPE 7','','마지막 주사 · 수영 종료']
+];
+const MS=[1,2,3,4,5,6];
+const DEF_BLOCKS=[
+{id:'ex',t:'07:30',e:'08:10',name:'기상 · 홈트',type:'ex',days:[1,3,5]},
+{id:'wake',t:'07:30',e:'',name:'기상 (운동 쉬는 날)',type:'etc',days:[2,4,6]},
+{id:'wash',t:'08:10',e:'',name:'씻기',type:'etc',days:MS},
+{id:'meal0',t:'08:30',e:'',name:'아침 식사 · 식사창 오픈',type:'meal',days:MS},
+{id:'s1',t:'09:30',e:'13:00',name:'공부 ① 오전 (3시간 30분)',type:'study',days:MS},
+{id:'meal1',t:'13:00',e:'',name:'점심 식사',type:'meal',days:MS},
+{id:'s2',t:'14:00',e:'17:30',name:'공부 ② 오후 (3시간 30분)',type:'study',days:MS},
+{id:'meal2',t:'18:00',e:'',name:'저녁 식사',type:'meal',days:MS},
+{id:'fast',t:'18:30',e:'',name:'식사창 마감 · 공복 시작',type:'meal',days:MS},
+{id:'s3',t:'19:00',e:'22:30',name:'공부 ③ 저녁 (3시간 30분)',type:'study',days:[1,2,3,4,5]}
+];
+const CFG_V=5;
+// 홈트: [버피, 스쿼트, 사이드플랭크(초), 트위스트, 세트, 스트레칭, 수영]
+// 예측 체중 (163cm · 시작(9/29) 72kg · 1,450kcal, 13주~ 위고비로 약 1,400kcal 가정 · ±1kg 오차)
+const PW={4:68.8,8:66.9,12:65.1,16:63.1,20:61.3,24:59.6};
+// PMS 저강도 방어 루틴 (원래 계획표 기준, 단계별)
+const PMS_HT=[[15,15,10,10,3,0,0],[15,20,15,15,3,0,0],[15,20,0,0,3,1,0],[15,15,0,0,3,1,0],[15,20,0,0,3,1,0],[15,20,0,0,3,1,0]];
+const HT=[
+[20,20,15,15,3,0,0],[20,20,15,15,3,0,0],[20,20,15,15,3,0,0],[20,20,15,15,3,0,0],
+[20,30,25,20,4,0,0],[20,30,25,20,4,0,0],[20,30,25,20,4,0,0],[20,30,25,20,4,0,0],
+[20,30,35,25,5,0,1],[20,30,35,25,5,0,1],[20,30,35,25,5,0,1],[20,30,35,25,5,0,0],
+[20,20,15,15,3,0,0],[20,20,15,15,3,0,0],[20,20,15,15,3,0,0],[20,20,15,15,3,0,0],
+[20,30,25,20,4,0,0],[20,30,25,20,4,0,0],[20,30,25,20,4,0,0],[20,30,25,20,4,0,0],
+[20,30,35,25,5,0,1],[20,30,35,25,5,0,1],[20,30,35,25,5,0,1],[20,30,35,25,5,0,0]
+];
+// ── 생리 주기 ──
+const parseD=x=>{const[a,b,c]=x.split('-').map(Number);return new Date(a,b-1,c)};
+const dayOnly=d=>new Date(d.getFullYear(),d.getMonth(),d.getDate());
+const addD=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+function cycLen(){const p=(cfg.periods||[]).map(parseD).sort((a,b)=>a-b);const iv=[];for(let i=1;i<p.length;i++){const v=Math.round((p[i]-p[i-1])/864e5);if(v>=20&&v<=45)iv.push(v)}const r=iv.slice(-3);return r.length?Math.round(r.reduce((a,b)=>a+b,0)/r.length):33}
+function starts(){const p=(cfg.periods||[]).slice().sort().map(x=>({d:parseD(x),pred:false}));if(!p.length)return p;const L=cycLen(),end=new Date(2027,5,1);let last=p[p.length-1].d;while(true){last=addD(last,L);if(last>end)break;p.push({d:last,pred:true})}return p}
+function phaseOf(d){const day=dayOnly(d),P=cfg.perLen||5,M=cfg.pmsDays||7;let r=null;for(const s of starts()){const diff=Math.round((day-s.d)/864e5);if(diff>=0&&diff<P)r={t:'per',n:diff+1,s};else if(diff<0&&diff>=-M&&!r)r={t:'pms',left:-diff,s}}return r}
+function nextStart(d){const day=dayOnly(d);return starts().find(s=>s.d>day)}
+function htForDate(d){const n=weekNo(d),base=HT[Math.min(Math.max(n,1),24)-1].slice(),ph=phaseOf(d);
+  if(ph&&ph.t==='per'){return {h:[0,0,0,0,0,1,0],mode:'per',ph}}
+  if(ph&&ph.t==='pms'){return {h:PMS_HT[Math.floor((Math.min(Math.max(n,1),24)-1)/4)].slice(),mode:'pms',ph}}
+  return {h:base,mode:'',ph}}
+
+function htItems(h){if(!h[4])return ['맨몸 스트레칭 10분 (생리 주간 · 쉬어도 OK)'];const a=['슬로우 버피 '+h[0]+'개','맨몸 스쿼트 '+h[1]+'개'];if(h[2])a.push('사이드 플랭크 좌우 '+h[2]+'초');if(h[3])a.push('트위스트 크런치 '+h[3]+'회');if(h[5])a.push('스트레칭');return a}
+function htLine(h){return h[4]?htItems(h).join(' + ')+' × '+h[4]+'세트':htItems(h)[0]}
+const TYPES={study:'공부',ex:'운동',meal:'식사',etc:'기타'};
+
+const LS={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let cfg=LS.get('r24cfg',null)||{blocks:JSON.parse(JSON.stringify(DEF_BLOCKS)),injTime:'20:00',pre:5,sound:true};
+if(cfg.v!==CFG_V){cfg.blocks=JSON.parse(JSON.stringify(DEF_BLOCKS));cfg.v=CFG_V;LS.set('r24cfg',cfg)}
+if(!cfg.alarmMode){cfg.alarmMode=cfg.sound===false?'vib':'both';LS.set('r24cfg',cfg)}
+if(!cfg.theme)cfg.theme='auto';
+function applyTheme(){document.documentElement.dataset.theme=cfg.theme;const m=document.querySelector('meta[name=theme-color]');if(m)m.content=getComputedStyle(document.body).backgroundColor||'#1f2126'}
+if(!cfg.periods){cfg.periods=['2026-08-14','2026-09-16'];cfg.perLen=5;cfg.pmsDays=7;LS.set('r24cfg',cfg)}
+let log=LS.get('r24log',{});
+let run=LS.get('r24run',null); // {k,id,ts}
+function save(){LS.set('r24cfg',cfg);LS.set('r24log',log);LS.set('r24run',run)}
+
+const $=s=>document.querySelector(s);
+const pad=n=>String(n).padStart(2,'0');
+const key=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const toMin=t=>{if(!t)return 0;const[a,b]=t.split(':').map(Number);return a*60+b};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const DOW='일월화수목금토';
+const md=d=>(d.getMonth()+1)+'/'+d.getDate()+'('+DOW[d.getDay()]+')';
+function fmtSec(s){s=Math.floor(s);return Math.floor(s/3600)+':'+pad(Math.floor(s%3600/60))+':'+pad(s%60)}
+function fmtH(s){const m=Math.floor(s/60);return Math.floor(m/60)+'시간 '+pad(m%60)+'분'}
+function dayLog(k){if(!log[k])log[k]={c:{},s:{},f:[],w:''};return log[k]}
+function weekNo(d){const a=new Date(d.getFullYear(),d.getMonth(),d.getDate());return Math.floor(Math.round((a-START)/864e5)/7)+1}
+function isInj(d){const n=weekNo(d);return n>=13&&n<=24&&d.getDay()===4}
+function onDay(b,d){return !b.days||!b.days.length||b.days.includes(d.getDay())}
+const monOf=d=>addD(dayOnly(d),-((d.getDay()+6)%7));
+const isPer=d=>{const p=phaseOf(d);return !!(p&&p.t==='per')};
+// 운동: 주 3회 (생리일에 걸린 예정일은 면제). 부족하면 예정일이 아닌 날에도 보충 알람
+function exInfo(d){const exB=cfg.blocks.find(b=>b.type==='ex');if(!exB)return null;const mon=monOf(d),today=dayOnly(d);let perSched=0,done=0,rem=0;
+  let pre=0;for(let i=0;i<7;i++){const x=addD(mon,i),sch=onDay(exB,x),per=isPer(x);if(x<APP_START){if(sch)pre++;continue}if(sch&&per)perSched++;
+    if(x<today){const l=log[key(x)];if(l&&l.c&&l.c.ex&&!per)done++}else if(sch&&!per)rem++}
+  const req=Math.max(0,3-perSched-pre);return {exB,req,done,need:req-done-rem,perSched,pre}}
+// 공부: 월~토 정규 블록 중 끝난 것 대비 체크 수
+function studyMiss(d){const mon=monOf(d),today=dayOnly(d),nowM=d.getHours()*60+d.getMinutes(),ids=cfg.blocks.filter(b=>b.type==='study').map(b=>b.id);let due=0,done=0;
+  for(let i=0;i<7;i++){const x=addD(mon,i);if(x>today)break;if(x<APP_START)continue;const same=+x===+today;
+    cfg.blocks.forEach(b=>{if(b.type==='study'&&onDay(b,x)&&(!same||toMin(b.e||b.t)<=nowM))due++});
+    const l=log[key(x)];if(l&&l.c)ids.forEach(id=>{if(l.c[id])done++})}
+  return Math.max(0,due-done)}
+function makeups(d,base){const out=[],k=key(d),c=(log[k]&&log[k].c)||{},wd=d.getDay();
+  if(!base.some(b=>b.type==='ex')&&!isPer(d)){const e=exInfo(d);if(e&&(e.need>0||c.ex))out.push(Object.assign({},e.exB,{name:'⚠️ 보충 홈트 (이번 주 '+e.done+(c.ex?'+1':'')+'/'+e.req+')',mk:1}))}
+  const st=cfg.blocks.filter(b=>b.type==='study');
+  if(wd===6||wd===0){const src=wd===6?(st.find(b=>b.id==='s3')||st[st.length-1]):(st.find(b=>b.id==='s1')||st[0]);
+    if(src&&!base.some(b=>b.id===src.id)){const m=studyMiss(d);if(m>0||c[src.id])out.push(Object.assign({},src,{name:'⚠️ '+src.name.replace(/\s*\(.*\)/,'')+' 보충 (미체크 '+m+'개)',mk:1}))}}
+  return out}
+function blocks(d){if(dayOnly(d)<APP_START)return [];let b=cfg.blocks.filter(x=>onDay(x,d));const mk=makeups(d,b);mk.forEach(m=>{if(m.type==='ex')b=b.filter(x=>!(x.type==='etc'&&x.t===m.t))});b.push(...mk);if(isInj(d))b.push({id:'inj',t:cfg.injTime,e:'',name:'💉 위고비 0.25mg ('+(weekNo(d)-12)+'/12회)',type:'inj'});return b.sort((x,y)=>toMin(x.t)-toMin(y.t))}
+function studySec(k,id){let s=(log[k]&&log[k].s[id])||0;if(run&&run.k===k&&run.id===id)s+=(Date.now()-run.ts)/1000;return s}
+function studyTotal(k){return cfg.blocks.filter(b=>b.type==='study').reduce((a,b)=>a+studySec(k,b.id),0)}
+function stopRun(){if(!run)return;const dl=dayLog(run.k);dl.s[run.id]=(dl.s[run.id]||0)+(Date.now()-run.ts)/1000;run=null;save()}
+
+let tab='today',wantWake=false,wl=null;
+function render(){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===tab));({today:rToday,plan:rPlan,hist:rHist,set:rSet})[tab]()}
+
+function mealWin(){const m=cfg.blocks.filter(b=>b.type==='meal').map(b=>b.t).sort();return m.length?'식사창 '+m[0]+' – '+m[m.length-1]:''}
+function swimCount(n){let c=0;for(let i=0;i<7;i++){const d=new Date(START);d.setDate(d.getDate()+(n-1)*7+i);const l=log[key(d)];if(l&&l.swim)c++}return c}
+function htCard(n,k,dl){const X=htForDate(new Date()),h=X.h;dl.hs=dl.hs||[];
+  const sets=h[4]?Array.from({length:h[4]},(_,i)=>`<button class="pill ${dl.hs[i]?'on':''}" data-set="${i}">${i+1}세트${dl.hs[i]?' ✓':''}</button>`).join(' '):`<button class="pill ${dl.hs[0]?'on':''}" data-set="0">스트레칭 완료${dl.hs[0]?' ✓':''}</button>`;
+  return `<div class="card"><h2>🏋️ 오늘 홈트${X.mode==='per'?' · 🩸 휴식·회복':X.mode==='pms'?' · 🛑 PMS 저강도 방어':''}</h2>
+  ${X.mode==='pms'?'<div class="bx" style="margin-bottom:8px">강도·세트 하향 · 심박수 급상승 주의, 버피는 천천히 · 운동으로 가짜 식욕·부종 완화 · 체중계 봉인</div>':''}${X.mode==='per'?'<div class="bx" style="margin-bottom:8px">관절·면역 저하 시기 · 무리하지 말고 14:10 공복만 지키기</div>':''}
+  <div style="margin-bottom:8px">${htItems(h).map(x=>'• '+esc(x)).join('<br>')}</div>
+  ${h[4]?`<div class="sub" style="margin-bottom:8px">${h[4]}세트 · 하루 총량 버피 ${h[0]*h[4]} / 스쿼트 ${h[1]*h[4]}</div>`:''}
+  <div style="display:flex;flex-wrap:wrap;gap:6px">${sets}</div>
+  ${h[2]?`<button class="btn" data-plank="${h[2]}" id="plankBtn">⏱ 사이드 플랭크 ${h[2]}초 타이머</button>`:''}
+  ${h[6]?`<div style="margin-top:10px;display:flex;align-items:center;gap:8px"><button class="pill ${dl.swim?'on':''}" id="swim">🏊 오늘 아침 수영${dl.swim?' ✓':''}</button><span class="sub">이번 주 ${swimCount(n)}/2회 · 수영 전 맹물만, 직후 단백질 쉐이크</span></div>`:''}
+  </div>`}
+let plankT=null;
+function cycTag(d){const ph=phaseOf(d),ns=nextStart(d);let t='';
+  if(ph&&ph.t==='per')t=`<span style="background:var(--chiliBg);color:var(--chili)">🩸 생리 ${ph.n}일차${ph.s.pred?' (예측)':''} · 휴식·회복</span>`;
+  else if(ph&&ph.t==='pms')t=`<span style="background:var(--warnBg);color:var(--warn)">🛑 PMS 주간 · 생리 D-${ph.left} · 저강도</span>`;
+  else if(ns){const dd=Math.round((ns.d-dayOnly(d))/864e5);t=`<span>🩸 다음 생리 ${md(ns.d)} (D-${dd})</span>`}
+  return t}
+function rToday(){
+  const d=new Date(),k=key(d),dl=dayLog(k),n=weekNo(d),bl=blocks(d);
+  const nowM=d.getHours()*60+d.getMinutes();
+  const w=(n>=1&&n<=24)?W[n-1]:null;
+  let wk;
+  if(n<1)wk='<div class="sub">24주 계획 시작 전</div>';
+  else if(!w)wk='<h2>24주 완료 🎉</h2><div class="sub">유지기 · 14:10 식사창 유지</div>';
+  else wk=`<h2>${n}주차 · ${n<=12?'시즌 1':'시즌 2'} · ${w[0]}</h2>
+    <div class="tags"><span>${w[1]}</span>${cycTag(d)}${w[3]?`<span>${esc(w[3])}</span>`:''}${n>=13?`<span class="inj">💉 ${isInj(d)?'오늘 주사일':'주사: 매주 목'}</span>`:''}</div>`;
+  let cur=-1;bl.forEach((b,i)=>{const s=toMin(b.t),e=b.e?toMin(b.e):s+30;if(nowM>=s&&nowM<e)cur=i});
+  const done=bl.filter(b=>dl.c[b.id]).length,st=studyTotal(k),blN=Math.max(1,bl.length);
+  const goal=bl.filter(b=>b.type==='study').reduce((a,b)=>a+(b.e?Math.max(0,toMin(b.e)-toMin(b.t)):0),0)*60||1;
+  $('#main').innerHTML=`
+  <header><div><h1>${md(d)}</h1><div class="sub">${mealWin()}</div></div>
+  <button class="pill ${wl?'on':''}" id="wake">${wl?'화면 켜둠 ON':'화면 켜두기'}</button></header>
+  <div class="card">${wk}</div>
+  ${w?(blocks(d).some(b=>b.type==='ex')?htCard(n,k,dl):`<div class="card"><h2>🛌 ${d.getDay()===0?'일요일 · 완전 휴식':'오늘은 운동 쉬는 날'}</h2><div class="sub">홈트 월·수·금 (이번 주 ${(()=>{const e=exInfo(d);return e?e.done+'/'+e.req:''})()}) · 루틴: ${htLine(htForDate(d).h)}</div></div>`):''}
+
+  
+  <div class="card">${bl.length?'':(dayOnly(d)<APP_START?'<div class="sub">루틴은 9/29(화)부터 시작합니다 · 그 전에는 알람 없음</div>':'<div class="sub">오늘은 일정·알람 없는 휴식일입니다 🌿</div>')}${bl.map((b,i)=>{const on=!!dl.c[b.id],isR=run&&run.k===k&&run.id===b.id;return `
+    <div class="blk t-${b.type} ${b.mk?'mk':''} ${i===cur?'now':''} ${on?'done':''}">
+      <button class="chk ${on?'on':''}" data-chk="${b.id}">${on?'✓':''}</button>
+      <div class="bi"><div class="bt">${b.t}${b.e?' – '+b.e:''}${i===cur?' · 지금':''}</div><div class="bn">${esc(b.name)}</div>
+      ${b.type==='ex'&&w?`<div class="bx">${w[1]} · 아래 홈트 카드 참고</div>`:''}
+      ${b.type==='study'?`<div class="sm" data-tm="${b.id}">${fmtSec(studySec(k,b.id))}</div>`:''}</div>
+      ${b.type==='study'?`<button class="tb ${isR?'run':''}" data-run="${b.id}">${isR?'정지':'시작'}</button>`:''}
+    </div>`}).join('')}</div>
+  <div class="card note">알람은 앱이 열려 있을 때 울립니다. 화면을 끄고 쓰려면 설정 → 캘린더 알림 내보내기를 함께 쓰세요.</div>`;
+}
+
+function htFull(h){return h[4]?'['+htItems(h).join(' + ')+'] × '+h[4]+'세트 (하루 총량: 슬로우 버피 '+h[0]*h[4]+'개 / 스쿼트 '+h[1]*h[4]+'개)':'운동 안 함 또는 가벼운 맨몸 스트레칭 10분'}
+function weekCyc(s0){const out=[];let pp=null,pm=null;for(let i=0;i<7;i++){const d=addD(s0,i),ph=phaseOf(d);if(!ph)continue;if(ph.t==='per'){if(!pp)pp=[d,d];else pp[1]=d}else{if(!pm)pm=[d,d];else pm[1]=d}}
+  if(pm)out.push(`<div style="color:var(--warn);margin-top:4px">🛑 PMS 암흑기 ${md(pm[0])}~${md(pm[1])} (저강도 방어)<br>• 홈트 루틴: 강도 하향 ➡️ ${esc(htFull(htForDate(pm[0]).h))}<br>• 심박수 급상승 주의 · 가짜 식욕은 얼음물·제로 음료로 · 체중계 봉인</div>`);
+  if(pp)out.push(`<div style="color:var(--chili);margin-top:4px">🩸 생리 주간 ${md(pp[0])}~${md(pp[1])} (휴식 및 회복)<br>• 홈트 루틴: ${htFull([0,0,0,0,0,1,0])}<br>• 관절·면역 저하 · 무리하지 말고 14:10 공복만 사수</div>`);
+  return out.join('')}
+function rPlan(){
+  const n=weekNo(new Date());
+  $('#main').innerHTML=`<header><div><h1>24주 계획</h1><div class="sub">2026.9.29 – 2027.3.16 · 위고비 13~24주 매주 목 · 생리 주기 ${cycLen()}일 기준 예측</div></div></header>
+  <div class="card"><h2>⚖️ 예측 체중 (4주 간격)</h2>
+  <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;font-size:12px">
+  <div><div class="sub">시작</div><b>72.0</b></div>${Object.entries(PW).map(([k,v])=>`<div><div class="sub">${k}주</div><b>${v}</b></div>`).join('')}</div>
+  <div class="note">163cm · 72kg(BMI 27.1) · 1,450kcal · 앉아서 공부 위주 활동량 + 주 3회 홈트 기준 추정. 체중이 줄수록 소모량도 줄어 감량 속도는 점점 느려짐. 생리·PMS 주간엔 ±1~2kg 수분 변동 정상. 목표 57kg까지는 24주 후 약 2~3kg 더 필요.</div></div>
+  <div class="card">${W.map((w,i)=>{const s=new Date(START);s.setDate(s.getDate()+i*7);const e=new Date(s);e.setDate(e.getDate()+6);
+    return `<div class="wk ${i+1===n?'cur':''}"><b>${i+1}주</b>${md(s)}~${md(e)} · ${w[0]} · ${w[1]}${i>=12?' · 💉'+(i-11)+'회':''}<div class="sub">🏋️ 기본 루틴 ➡️ ${esc(htFull(HT[i]))}${HT[i][6]?' · 🏊 주2회 아침 공복 수영':''}${weekCyc(s)}${w[3]?'<br>'+esc(w[3]):''}${PW[i+1]?`<br><b style="color:var(--acc)">⚖️ ${i+1}주차 말 예측 체중 ${PW[i+1]}kg</b> <span class="sub">(${(PW[i+1]-1).toFixed(1)}~${(PW[i+1]+1).toFixed(1)} · BMI ${(PW[i+1]/1.63/1.63).toFixed(1)})</span>`:''}</div></div>`}).join('')}</div>`;
+}
+
+function stampOf(h){if(h>=50)return['Excellent','var(--inj)'];if(h>=45)return['Achieved','var(--ok)'];if(h>=35)return['Average','var(--acc)'];return['Attention Required','var(--chili)']}
+function weekStat(mon){let sec=0,ex=0;for(let i=0;i<7;i++){const x=addD(mon,i);if(x<APP_START)continue;const k=key(x);sec+=studyTotal(k);const l=log[k];if(l&&l.c&&l.c.ex)ex++}return{h:sec/3600,ex}}
+function weekRows(){const cur=monOf(new Date()),m0=monOf(APP_START),out=[];let m=new Date(cur),n=Math.round((cur-m0)/6048e5)+1;
+  while(m>=m0){const sd=m<APP_START?APP_START:m;const st=weekStat(m),sp=stampOf(st.h),live=+m===+cur,e=addD(m,6);
+    out.push(`<div class="wkr"><div class="t"><b>${(sd.getMonth()+1)}/${sd.getDate()}~${(e.getMonth()+1)}/${e.getDate()}(${n}주차)</b><br>${live?'<span class="sub">진행 중 · 일요일 마감 시 확정</span><br>':''}공부 ${st.h.toFixed(1).replace(/\.0$/,'')}시간, 운동 ${st.ex}번</div><span class="stamp" style="color:${sp[1]};${live?'opacity:.45':''}">${sp[0]}</span></div>`);
+    m=addD(m,-7);n--}
+  return out.join('')}
+function rHist(){
+  const t=new Date(),tk=key(t),first=APP_START;let rows='';
+  for(let i=0;i<60;i++){const d=new Date(t);d.setDate(t.getDate()-i);if(d<first&&!log[key(d)])break;const k=key(d),dl=log[k]||{c:{},w:''},bl=blocks(d);
+    const p=bl.length?bl.filter(b=>dl.c[b.id]).length/bl.length:0;
+    rows+=`<div class="hd"><div class="d">${md(d)}</div><div class="b"><div class="bar"><i style="width:${p*100}%"></i></div></div><div class="v">${Math.round(p*100)}% · ${(studyTotal(k)/3600).toFixed(1)}h${dl.w?'<br>'+esc(dl.w)+'kg':''}</div></div>`}
+  $('#main').innerHTML=`<header><div><h1>기록</h1><div class="sub">이행률 · 순공 시간 · 체중</div></div></header>
+  <div class="card"><h2>주간 기록</h2><div class="sub" style="margin-bottom:4px">월~일 기준 · 매주 월요일 리셋 · 35h Average / 45h Achieved / 50h Excellent</div>${weekRows()}</div>
+  <div class="card"><h2>오늘 체중 (선택)</h2><input id="wt" inputmode="decimal" placeholder="예: 62.4" value="${esc(dayLog(tk).w||'')}"></div>
+  <div class="card">${rows||'<div class="sub">아직 기록이 없어요</div>'}</div>`;
+}
+
+function rSet(){
+  $('#main').innerHTML=`<header><div><h1>설정</h1><div class="sub">요일 버튼으로 반복 요일 설정 · 보충 알람은 앱에서만 울림</div></div></header>
+  <div class="card"><h2>시간표</h2><div class="sub" style="margin-bottom:8px">시작 · 종료(선택) · 이름 · 요일 · 종류</div>
+  ${cfg.blocks.map((b,i)=>`<div class="row"><input type="time" value="${b.t}" data-i="${i}" data-f="t"><input type="time" value="${b.e||''}" data-i="${i}" data-f="e"><input value="${esc(b.name)}" data-i="${i}" data-f="name"></div>
+  <div style="display:flex;gap:4px;margin-bottom:6px">${[1,2,3,4,5,6,0].map(x=>`<button class="pill ${(!b.days||!b.days.length||b.days.includes(x))?'on':''}" style="flex:1;padding:5px 0" data-day="${i}:${x}">${DOW[x]}</button>`).join('')}</div>
+  <div class="row2"><select data-i="${i}" data-f="type">${Object.entries(TYPES).map(([v,l])=>`<option value="${v}" ${b.type===v?'selected':''}>${l}</option>`).join('')}</select><button class="del" data-del="${i}">✕</button></div>`).join('')}
+  <button class="btn" id="add">+ 일정 추가</button></div>
+  <div class="card"><h2>🎨 화면 모드</h2><div style="display:flex;gap:6px">${[['auto','자동 (폰 설정)'],['dark','차콜 다크'],['light','아이보리 라이트']].map(([v,l])=>`<button class="pill ${cfg.theme===v?'on':''}" style="flex:1;padding:9px 0" data-th="${v}">${l}</button>`).join('')}</div></div>
+  <div class="card"><h2>🩸 생리 주기</h2>
+  <div class="sub" style="margin-bottom:8px">평균 주기 ${cycLen()}일 · 다음 예정 ${nextStart(new Date())?md(nextStart(new Date()).d):'-'} · 실제 시작일을 기록하면 예측이 자동 보정됩니다</div>
+  ${(cfg.periods||[]).slice().sort().reverse().map(p=>`<div class="hd"><div class="b">${p}</div><button class="del" style="width:40px;height:32px" data-pdel="${p}">✕</button></div>`).join('')}
+  <div class="row" style="grid-template-columns:1fr 1fr;margin-top:8px"><input type="date" id="pdate" value="${key(new Date())}"><button class="btn" style="margin:0" id="padd">시작일 기록</button></div>
+  <div class="row" style="grid-template-columns:1fr 1fr"><label class="sub">생리 기간(일)<input type="number" id="plen" min="3" max="8" value="${cfg.perLen||5}"></label><label class="sub">PMS 기간(생리 전 일수)<input type="number" id="ppms" min="3" max="10" value="${cfg.pmsDays||7}"></label></div>
+  </div>
+  <div class="card"><h2>알림</h2>
+  <div class="row" style="grid-template-columns:1fr 1fr"><label class="sub">미리 알림<select id="pre">${[0,5,10,15].map(v=>`<option value="${v}" ${cfg.pre==v?'selected':''}>${v?v+'분 전':'안 함'}</option>`).join('')}</select></label>
+  <label class="sub">위고비 주사 시각<input type="time" id="inj" value="${cfg.injTime}"></label></div>
+  <div class="sub" style="margin-top:10px">알람 방식</div><div style="display:flex;gap:6px;margin-top:4px">${[['both','🔔 소리+진동'],['vib','📳 진동만'],['sound','🔈 소리만']].map(([v,l])=>`<button class="pill ${cfg.alarmMode===v?'on':''}" style="flex:1;padding:9px 0" data-am="${v}">${l}</button>`).join('')}</div>
+  <button class="btn" id="test">알람 테스트 (현재 방식으로)</button>
+  <button class="btn" id="perm">시스템 알림 권한 요청</button>
+  <button class="btn p" id="ics">캘린더 알림 내보내기 (.ics)</button>
+  <div class="note">.ics 파일을 구글 캘린더에 가져오면 9/29부터 3/16까지 모든 일정과 목요일 주사 알림이 폰 캘린더 알림으로 옵니다 (앱이 꺼져 있어도 울림). 시간표를 바꾼 뒤엔 다시 내보내세요.</div></div>
+  <div class="card"><h2>데이터</h2><button class="btn" id="bak">기록 백업 파일 받기</button><button class="btn" id="rst">시간표 기본값으로</button></div>`;
+}
+
+function download(name,text,type){try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.appendChild(a);a.click();a.remove()}catch(e){alert('이 환경에서는 다운로드가 안 됩니다. 크롬에서 열어 다시 시도하세요.')}}
+function makeICS(){
+  const L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//routine24//KO','CALSCALE:GREGORIAN','X-WR-CALNAME:루틴 24주','X-WR-TIMEZONE:Asia/Seoul',
+  'BEGIN:VTIMEZONE','TZID:Asia/Seoul','BEGIN:STANDARD','DTSTART:19700101T000000','TZOFFSETFROM:+0900','TZOFFSETTO:+0900','TZNAME:KST','END:STANDARD','END:VTIMEZONE'];
+  const trig=cfg.pre>0?'TRIGGER:-PT'+cfg.pre+'M':'TRIGGER:PT0S';
+  const hm=m=>pad(Math.floor(m/60)%24)+pad(m%60)+'00';
+  const ev=(uid,date,s,e,sum,rr)=>L.push('BEGIN:VEVENT','UID:'+uid+'@routine24','DTSTAMP:20260927T000000Z','DTSTART;TZID=Asia/Seoul:'+date+'T'+hm(s),'DTEND;TZID=Asia/Seoul:'+date+'T'+hm(e),...(rr?[rr]:[]),'SUMMARY:'+sum,'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:'+sum,trig,'END:VALARM','END:VEVENT');
+  cfg.blocks.filter(b=>b.type==='ex').forEach((b,i)=>{const s=toMin(b.t);let e=b.e?toMin(b.e):s+15;for(let x=new Date(APP_START);x<=new Date(2027,2,16);x=addD(x,1)){if(!onDay(b,x))continue;const X=htForDate(x),tag=X.mode==='per'?'🩸 휴식·회복 ':X.mode==='pms'?'🛑 PMS 저강도 ':'';ev('ex'+key(x),key(x).replace(/-/g,''),s,e,'🏋️ '+tag+htLine(X.h),'')}});
+  cfg.blocks.forEach((b,i)=>{if(b.type==='ex')return;const s=toMin(b.t);let e=b.e?toMin(b.e):s+15;if(e<=s)e=Math.min(s+15,1439);ev('b'+i+'-'+b.id,'20260929',s,e,b.name,(b.days&&b.days.length?'RRULE:FREQ=WEEKLY;BYDAY='+b.days.map(x=>['SU','MO','TU','WE','TH','FR','SA'][x]).join(',')+';':'RRULE:FREQ=DAILY;')+'UNTIL=20270316T145959Z')});
+  const s=toMin(cfg.injTime);ev('wegovy','20261224',s,s+15,'💉 위고비 0.25mg','RRULE:FREQ=WEEKLY;BYDAY=TH;COUNT=12');
+  const ds=d=>d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate());
+  const allday=(uid,d1,d2,sum)=>L.push('BEGIN:VEVENT','UID:'+uid+'@routine24','DTSTAMP:20260927T000000Z','DTSTART;VALUE=DATE:'+ds(d1),'DTEND;VALUE=DATE:'+ds(d2),'SUMMARY:'+sum,'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:'+sum,'TRIGGER:PT8H','END:VALARM','END:VEVENT');
+  const from=APP_START,to=new Date(2027,2,17);
+  starts().forEach(st=>{const pm=addD(st.d,-(cfg.pmsDays||7));if(st.d>=from&&st.d<to)allday('per'+ds(st.d),st.d,addD(st.d,cfg.perLen||5),'🩸 생리'+(st.pred?' 예정':'')+' · 휴식·회복 (스트레칭만)');if(pm>=from&&pm<to)allday('pms'+ds(st.d),pm,st.d,'🛑 PMS 주간 · 운동 −25% 저강도, 심박수 주의')});
+  L.push('END:VCALENDAR');return L.join('\r\n');
+}
+
+// events
+document.querySelector('nav').addEventListener('click',e=>{const b=e.target.closest('button');if(b){tab=b.dataset.t;render();scrollTo(0,0)}});
+$('#main').addEventListener('click',async e=>{
+  const t=e.target.closest('button');if(!t)return;const k=key(new Date());
+  if(t.dataset.set!==undefined){const dl=dayLog(k);dl.hs=dl.hs||[];const i=+t.dataset.set;dl.hs[i]=!dl.hs[i];const h=htForDate(new Date()).h;const need=h[4]?h[4]:1;let c=0;for(let j=0;j<need;j++)if(dl.hs[j])c++;dl.c.ex=c>=need;save();render();return}
+  if(t.id==='swim'){const dl=dayLog(k);dl.swim=!dl.swim;save();render();return}
+  if(t.dataset.plank){if(plankT){clearInterval(plankT);plankT=null;t.textContent='⏱ 사이드 플랭크 '+t.dataset.plank+'초 타이머';return}const P=+t.dataset.plank;const ph=[['왼쪽',P],['쉬고 오른쪽 준비',5],['오른쪽',P]];let pi=0,r=P;unlock();beep();const tick=()=>{if(r<=0){beep();vib();pi++;if(pi>=ph.length){clearInterval(plankT);plankT=null;t.textContent='✓ 좌우 완료 · 다시 하려면 탭';return}r=ph[pi][1]}t.textContent=ph[pi][0]+' '+r+'초 (탭하면 정지)';r--};tick();plankT=setInterval(tick,1000);return}
+  if(t.dataset.day){const[i,x]=t.dataset.day.split(':').map(Number);const b=cfg.blocks[i];let ds=(b.days&&b.days.length)?b.days.slice():[0,1,2,3,4,5,6];ds=ds.includes(x)?ds.filter(y=>y!==x):ds.concat(x);if(!ds.length)return;b.days=ds.length===7?undefined:ds.sort();save();render();return}
+  if(t.dataset.pdel){if(confirm(t.dataset.pdel+' 기록을 삭제할까요?')){cfg.periods=cfg.periods.filter(x=>x!==t.dataset.pdel);save();render()}return}
+  if(t.id==='padd'){const v=$('#pdate').value;if(v&&!cfg.periods.includes(v)){cfg.periods.push(v);save();render()}return}
+  if(t.dataset.chk){const dl=dayLog(k);dl.c[t.dataset.chk]=!dl.c[t.dataset.chk];save();render()}
+  else if(t.dataset.run){const id=t.dataset.run;const same=run&&run.k===k&&run.id===id;stopRun();if(!same){run={k,id,ts:Date.now()};save()}render()}
+  else if(t.dataset.del){if(confirm('이 일정을 삭제할까요?')){cfg.blocks.splice(+t.dataset.del,1);save();render()}}
+  else if(t.id==='wake'){wantWake=!wl;await setWake();render()}
+  else if(t.id==='add'){cfg.blocks.push({id:'b'+Date.now(),t:'12:00',e:'',name:'새 일정',type:'etc'});save();render()}
+  else if(t.dataset.th){cfg.theme=t.dataset.th;save();applyTheme();render()}
+  else if(t.dataset.am){cfg.alarmMode=t.dataset.am;save();render()}
+  else if(t.id==='test'){ring('알람 테스트')}
+  else if(t.id==='perm'){try{const r=await Notification.requestPermission();alert('권한: '+r)}catch(err){alert('이 환경에서는 시스템 알림을 지원하지 않아요. 앱 내 알람과 캘린더 알림을 쓰세요.')}}
+  else if(t.id==='ics'){download('routine24.ics',makeICS(),'text/calendar')}
+  else if(t.id==='bak'){download('routine24-backup.json',JSON.stringify({cfg,log},null,1),'application/json')}
+  else if(t.id==='rst'){if(confirm('시간표를 기본값으로 되돌릴까요? (기록은 유지)')){cfg.blocks=JSON.parse(JSON.stringify(DEF_BLOCKS));save();render()}}
+});
+$('#main').addEventListener('change',e=>{
+  const t=e.target;
+  if(t.dataset.f){cfg.blocks[+t.dataset.i][t.dataset.f]=t.value;save();if(t.dataset.f==='type')render()}
+  else if(t.id==='plen'){cfg.perLen=Math.min(8,Math.max(3,+t.value||5));save()}
+  else if(t.id==='ppms'){cfg.pmsDays=Math.min(10,Math.max(3,+t.value||7));save()}
+  else if(t.id==='pre'){cfg.pre=+t.value;save()}
+  else if(t.id==='inj'){cfg.injTime=t.value||'20:00';save()}
+  else if(t.id==='wt'){dayLog(key(new Date())).w=t.value.trim();save();render()}
+});
+
+// wake lock
+async function setWake(){try{if(wantWake&&!wl&&navigator.wakeLock){wl=await navigator.wakeLock.request('screen');wl.addEventListener('release',()=>{wl=null;if(tab==='today')render()})}else if(!wantWake&&wl){await wl.release();wl=null}else if(wantWake&&!navigator.wakeLock){alert('이 환경에서는 화면 유지 기능이 없어요. 폰 설정에서 화면 꺼짐 시간을 늘려 주세요.');wantWake=false}}catch(e){wantWake=false}}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){setWake();checkAlarms();render()}});
+
+// sound + alarm
+let AC=null,beepT=null,autoOff=null;
+function unlock(){try{if(!AC)AC=new(window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume()}catch(e){}}
+document.addEventListener('pointerdown',unlock);
+function beep(){if(!AC||cfg.alarmMode==='vib')return;const t=AC.currentTime;[0,.28,.56].forEach(o=>{const g=AC.createGain(),os=AC.createOscillator();os.type='sine';os.frequency.value=880;g.gain.setValueAtTime(.0001,t+o);g.gain.exponentialRampToValueAtTime(.45,t+o+.02);g.gain.exponentialRampToValueAtTime(.0001,t+o+.22);os.connect(g);g.connect(AC.destination);os.start(t+o);os.stop(t+o+.25)})}
+function vib(){if(cfg.alarmMode==='sound')return;try{navigator.vibrate&&navigator.vibrate([700,300,700,300,700])}catch(e){}}
+function ring(msg){$('#amsg').textContent=msg;$('#alarm').classList.add('on');beep();vib();clearInterval(beepT);beepT=setInterval(()=>{beep();vib()},2200);clearTimeout(autoOff);autoOff=setTimeout(stopRing,90000);
+  try{if('Notification' in window&&Notification.permission==='granted')new Notification('루틴 알림',{body:msg})}catch(e){}}
+function stopRing(){clearInterval(beepT);clearTimeout(autoOff);$('#alarm').classList.remove('on')}
+$('#aok').addEventListener('click',stopRing);
+
+function checkAlarms(){
+  const d=new Date(),k=key(d),dl=dayLog(k),now=d.getHours()*60+d.getMinutes()+d.getSeconds()/60;let changed=false;
+  blocks(d).forEach(b=>{
+    const ev=[[toMin(b.t),'s',b.name+' 시작']];
+    if(cfg.pre>0)ev.push([toMin(b.t)-cfg.pre,'p',cfg.pre+'분 후 · '+b.name]);
+    if(b.e&&(b.type==='study'||b.type==='ex'))ev.push([toMin(b.e),'e',b.name+' 종료']);
+    ev.forEach(([m,tag,msg])=>{const id=b.id+tag+b.t;if(dl.f.includes(id))return;if(now>=m&&now-m<3){dl.f.push(id);changed=true;ring(msg)}});
+  });
+  if(run&&run.k!==k)stopRun();
+  if(changed)save();
+}
+setInterval(checkAlarms,10000);
+setInterval(()=>{if(tab!=='today')return;const k=key(new Date());document.querySelectorAll('[data-tm]').forEach(el=>el.textContent=fmtSec(studySec(k,el.dataset.tm)));},1000);
+let lastMin=new Date().getMinutes();
+setInterval(()=>{const m=new Date().getMinutes();if(m!==lastMin){lastMin=m;if(tab==='today'&&!document.activeElement.matches('input,select'))render()}},5000);
+
+applyTheme();render();checkAlarms();
+</script>
+</body>
+</html>
